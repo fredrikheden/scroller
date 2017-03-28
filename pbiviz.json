@@ -2,7 +2,7 @@
   "visual": {
     "name": "Scroller",
     "displayName": "Scroller",
-    "guid": "Scroller_FC5183B9_926C_45E0_B5F7_0CE9EAF1DA9B",
+    "guid": "ScrollingTextVisual1448795304508",
     "visualClassName": "Visual",
     "version": "2.0.0",
     "description": "The Scroller visual creates an animating scrolling text. You can use a custom text or create it from your dimensions and measures. Various settings makes it possible to control speed, size, status indications, coloring, etc.",

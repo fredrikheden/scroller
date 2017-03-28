@@ -101,6 +101,7 @@ module powerbi.extensibility.visual {
             settings: <VisualSettings>{}
         };
 
+        /*
         if (!dataViews
             || !dataViews[0]
             || !dataViews[0].categorical
@@ -108,6 +109,12 @@ module powerbi.extensibility.visual {
             || !dataViews[0].categorical.categories[0].source
             || !dataViews[0].categorical.values)
             return viewModel;
+            */
+
+        if (! dataViews[0] || !dataViews[0].categorical.values ) {
+            return viewModel;
+        }
+
 
         let objects = dataViews[0].metadata.objects;
         let visualSettings: VisualSettings = {
@@ -139,13 +146,24 @@ module powerbi.extensibility.visual {
             visualSettings.scroller.pSpeed = 0;
         }
 
-
         let categorical = dataViews[0].categorical;
-        let category = categorical.categories[0];
+        let category = typeof(categorical.categories)==='undefined' ? null : categorical.categories[0];
         let dataValue = categorical.values[0];
 
         let measureAbsoluteIndex = getMeasureIndex(categorical, "MeasureAbsolute");
         let measureDeviationIndex = getMeasureIndex(categorical, "MeasureDeviation");
+
+        // If we dont have a category, set a default one
+        if ( category === null ) {
+            let tmp:DataViewCategoryColumn = {
+                source:null,
+                values:[]
+            };
+            category = tmp;
+            category.values = [];
+            category.values.push("");
+        }
+
 
         let visualDataPoints: VisualDataPoint[] = [];
         for (let i = 0, len = Math.max(category.values.length, dataValue.values.length); i < len; i++) {
@@ -227,6 +245,7 @@ module powerbi.extensibility.visual {
 
         
         public update(options: VisualUpdateOptions) {
+
             this.shouldRestartAnimFrame = true;
 
             let viewModel: VisualViewModel = visualTransform(options, this.host, this);
@@ -240,15 +259,19 @@ module powerbi.extensibility.visual {
                 this.svg.attr("visibility", "hidden");
                 return;
             }
+
             this.svg.attr("visibility", "visible");           
 
             this.svg
                 .attr("width", width)
                 .attr("height", height);
 
+                
+
 
             var dataViews = options.dataViews;
             if (!dataViews) return;
+            
             this.dataView = options.dataViews[0];
             var that = this;
             this.shouldRestartAnimFrame = true;
