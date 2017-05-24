@@ -111,7 +111,7 @@ module powerbi.extensibility.visual {
             return viewModel;
             */
 
-        if (! dataViews[0] || !dataViews[0].categorical.values ) {
+        if ( !dataViews[0] ) {
             return viewModel;
         }
 
@@ -131,6 +131,11 @@ module powerbi.extensibility.visual {
                 pInterval: getValue<number>(objects, 'scroller', 'pInterval', defaultSettings.scroller.pInterval)
             }
         }
+        viewModel.settings = visualSettings;
+
+        if (! dataViews[0] || !dataViews[0].categorical.values ) {
+            return viewModel;
+        }        
 
         // Set property limits
 
@@ -150,8 +155,8 @@ module powerbi.extensibility.visual {
         let category = typeof(categorical.categories)==='undefined' ? null : categorical.categories[0];
         let dataValue = categorical.values[0];
 
-        let measureAbsoluteIndex = getMeasureIndex(categorical, "MeasureAbsolute");
-        let measureDeviationIndex = getMeasureIndex(categorical, "MeasureDeviation");
+        let measureAbsoluteIndex = getMeasureIndex(categorical, "Measure Absolute");
+        let measureDeviationIndex = getMeasureIndex(categorical, "Measure Deviation");
 
         // If we dont have a category, set a default one
         if ( category === null ) {
@@ -245,7 +250,6 @@ module powerbi.extensibility.visual {
 
         
         public update(options: VisualUpdateOptions) {
-
             this.shouldRestartAnimFrame = true;
 
             let viewModel: VisualViewModel = visualTransform(options, this.host, this);
@@ -255,7 +259,8 @@ module powerbi.extensibility.visual {
             let width = this.gWidth = options.viewport.width;
             let height = this.gHeight = options.viewport.height;
 
-            if (this.visualDataPoints.length === 0) {
+            if ( (this.visualDataPoints.length === 0 && typeof(this.visualCurrentSettings.scroller) === 'undefined') || (this.visualDataPoints.length === 0 && this.visualCurrentSettings.scroller.pCustomText.length === 0) ) {
+                // if we have no data and no custom text we want to exit.
                 this.svg.attr("visibility", "hidden");
                 return;
             }
@@ -266,10 +271,7 @@ module powerbi.extensibility.visual {
                 .attr("width", width)
                 .attr("height", height);
 
-                
-
-
-            var dataViews = options.dataViews;
+              var dataViews = options.dataViews;
             if (!dataViews) return;
             
             this.dataView = options.dataViews[0];
@@ -333,7 +335,7 @@ module powerbi.extensibility.visual {
             if (!this.animationFrameLoopStarted) {
                 this.animationFrameLoopStarted = true;
                 this.animationStep();
-            }
+            } 
         }
 
         private CreateTextFromData(viewModel: VisualViewModel, dataView: DataView) {

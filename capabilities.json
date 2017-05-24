@@ -7,7 +7,7 @@
     },
     {
       "displayName": "Measure Absolute",
-      "name": "MeasureAbsolute",
+      "name": "Measure Absolute",
       "kind": "Measure",
       "requiredTypes": [
         {
@@ -17,7 +17,7 @@
     },
     {
       "displayName": "Measure Deviation",
-      "name": "MeasureDeviation",
+      "name": "Measure Deviation",
       "kind": "Measure",
       "requiredTypes": [
         {
@@ -33,10 +33,10 @@
           "Category": {
             "max": 1
           },
-          "MeasureAbsolute": {
+          "Measure Absolute": {
             "max": 1
           },
-          "MeasureDeviation": {
+          "Measure Deviation": {
             "max": 1
           }
         }
@@ -56,12 +56,12 @@
             "select": [
               {
                 "bind": {
-                  "to": "MeasureAbsolute"
+                  "to": "Measure Absolute"
                 }
               },
               {
                 "bind": {
-                  "to": "MeasureDeviation"
+                  "to": "Measure Deviation"
                 }
               }
             ],
