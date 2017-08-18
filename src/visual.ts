@@ -133,7 +133,9 @@ module powerbi.extensibility.visual {
         }
         viewModel.settings = visualSettings;
 
-        if (! dataViews[0] || !dataViews[0].categorical.values ) {
+        if (! dataViews[0] 
+            ||!dataViews[0].categorical 
+            ||!dataViews[0].categorical.values ) {
             return viewModel;
         }        
 

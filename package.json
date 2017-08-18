@@ -1,7 +1,7 @@
 {
   "name": "visual",
   "displayName": "Scroller",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "The Scroller visual creates an animating scrolling text. You can use a custom text or create it from your dimensions and measures. Various settings makes it possible to control speed, size, status indications, coloring, etc.",
   "author": {
     "name": "Fredrik Hedenström",
@@ -12,8 +12,8 @@
     "url": ""
   },
   "keywords": [
-  "powerbi-visuals",
-  "scroller"
+    "powerbi-visuals",
+    "scroller"
   ],
   "license": "",
   "scripts": {
