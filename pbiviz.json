@@ -4,7 +4,7 @@
     "displayName": "Scroller",
     "guid": "ScrollingTextVisual1448795304508",
     "visualClassName": "Visual",
-    "version": "2.0.1",
+    "version": "2.0.2",
     "description": "The Scroller visual creates an animating scrolling text. You can use a custom text or create it from your dimensions and measures. Various settings makes it possible to control speed, size, status indications, coloring, etc.",
     "supportUrl": "http://www.fredrikhedenstrom.com",
     "gitHubUrl": ""
