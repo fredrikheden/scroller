@@ -171,8 +171,8 @@ module powerbi.extensibility.visual {
             category.values.push("");
         }
 
+        let visualDataPoints: VisualDataPoint[] = [];        
 
-        let visualDataPoints: VisualDataPoint[] = [];
         for (let i = 0, len = Math.max(category.values.length, dataValue.values.length); i < len; i++) {
             var measureAbs = measureAbsoluteIndex > -1 ? <number>categorical.values[measureAbsoluteIndex].values[i] : null;
             var measureDev = measureDeviationIndex > -1 ? <number>categorical.values[measureDeviationIndex].values[i] : null;
@@ -261,7 +261,7 @@ module powerbi.extensibility.visual {
             let width = this.gWidth = options.viewport.width;
             let height = this.gHeight = options.viewport.height;
 
-            if ( (this.visualDataPoints.length === 0 && typeof(this.visualCurrentSettings.scroller) === 'undefined') || (this.visualDataPoints.length === 0 && this.visualCurrentSettings.scroller.pCustomText.length === 0) ) {
+            if ( (this.visualDataPoints.length === 0 && typeof(this.visualCurrentSettings.scroller) === 'undefined') || (this.visualDataPoints.length === 0 && (!this.visualCurrentSettings.scroller.pCustomText || this.visualCurrentSettings.scroller.pCustomText.length === 0))) {
                 // if we have no data and no custom text we want to exit.
                 this.svg.attr("visibility", "hidden");
                 return;
@@ -358,7 +358,7 @@ module powerbi.extensibility.visual {
             this.arrTextCategories = [];
 
             var sText = this.visualCurrentSettings.scroller.pCustomText;
-            if (sText.length > 0) {
+            if (sText && sText.length > 0) {
                 // We have a custom text.               
                 var newCat: TextCategory = {
                     txtCategory: sText,
@@ -466,11 +466,13 @@ module powerbi.extensibility.visual {
 
         public getMetaDataColumnForMeasureIndex(dataView: DataView, measureIndex: number) {
             var addCol = 0;
-            for (var i = 0; i < dataView.metadata.columns.length; i++) {
-                if (!dataView.metadata.columns[i].isMeasure)
-                    addCol++;
-            }
+            
             if (dataView && dataView.metadata && dataView.metadata.columns) {
+                for (var i = 0; i < dataView.metadata.columns.length; i++) {
+                    if (!dataView.metadata.columns[i].isMeasure)
+                        addCol++;
+                }
+
                 var column = dataView.metadata.columns[measureIndex + addCol];
                 if (column.isMeasure) {
                     return column;
@@ -535,7 +537,11 @@ module powerbi.extensibility.visual {
             this.animationUpdateStep();
         }    
 
-        public animationUpdateStep() {            
+        public animationUpdateStep() {
+            if (!this.arrTextCategories) {
+                return;
+            }
+
             var now = new Date().getTime(), dt = now - (this.animationLastTime || now);
             this.animationLastTime = now;
 
